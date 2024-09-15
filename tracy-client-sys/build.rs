@@ -12,6 +12,9 @@ fn link_dependencies() {
             ::std::process::exit(0xfd);
         }
     }
+    if std::env::var_os("CARGO_FEATURE_DEBUGINFOD").is_some() {
+        println!("cargo:rustc-link-lib=debuginfod");
+    }
 }
 
 fn set_feature_defines(mut c: cc::Build) -> cc::Build {
@@ -44,6 +47,9 @@ fn set_feature_defines(mut c: cc::Build) -> cc::Build {
     }
     if std::env::var_os("CARGO_FEATURE_DEMANGLE").is_some() {
         c.define("TRACY_DEMANGLE", None);
+    }
+    if std::env::var_os("CARGO_FEATURE_DEBUGINFOD").is_some() {
+        c.define("TRACY_DEBUGINFOD", None);
     }
 
     // Note: these are inversed and check for `is_none`!
